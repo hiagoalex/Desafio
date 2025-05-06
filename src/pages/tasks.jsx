@@ -8,6 +8,7 @@ export default function TasksPage() {
   const [filterPriority, setFilterPriority] = useState('all');
   const [tasks, setTasks] = useState([]);
   const [isAuthenticated, setIsAuthenticated] = useState(true);
+
   const saveTasksToLocalStorage = (tasks) => {
     localStorage.setItem('tasks', JSON.stringify(tasks));
   };
@@ -27,16 +28,16 @@ export default function TasksPage() {
 
   const onLogout = () => {
     setIsAuthenticated(false);
-  }
+  };
 
-  const addTask = (text, priority) => {
+  const addTask = (text, priority, date) => {
     const newTask = {
       id: Date.now(),
       text,
       priority,
-      completed: false
+      date,
+      completed: false,
     };
-
     const updatedTasks = [...tasks, newTask];
     setTasks(updatedTasks);
     saveTasksToLocalStorage(updatedTasks);
@@ -64,7 +65,6 @@ export default function TasksPage() {
     saveTasksToLocalStorage(updatedTasks);
   };
 
-
   const filtered = tasks
     .filter((task) => {
       if (filterStatus === 'completed') return task.completed;
@@ -75,6 +75,10 @@ export default function TasksPage() {
       if (filterPriority === 'all') return true;
       return task.priority === filterPriority;
     });
+    
+    if (!isAuthenticated) {
+      return <div className="text-center mt-5">Você foi desconectado.</div>;
+    }
 
   return (
     <div className="container py-4">
@@ -88,10 +92,10 @@ export default function TasksPage() {
         </select>
         <select className="form-select w-auto" onChange={(e) => setFilterPriority(e.target.value)}>
           <option value="all">Todas Prioridades</option>
-          <option value="Alta">Urgente⚡</option>
-          <option value="Alta">Alta🔴</option>
-          <option value="Média">Média🟡</option>
-          <option value="Baixa">Baixa🟢</option>
+          <option>Urgente⚡</option>
+          <option>Alta🔴</option>
+          <option>Média🟡</option>
+          <option>Baixa🟢</option>
         </select>
       </div>
       <TaskList tasks={filtered} onToggle={toggleTask} onEdit={editTask} onRemove={removeTask} />

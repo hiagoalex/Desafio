@@ -21,7 +21,7 @@ function TaskList({ tasks, onToggle, onEdit, onRemove }) {
     <ul className="list-group">
       {tasks.map(task => (
         <li key={task.id} className={`list-group-item d-flex justify-content-between align-items-center ${task.completed ? 'bg-light text-muted' : ''}`}>
-          <div className="d-flex align-items-center gap-2">
+          <div className="d-flex flex-column flex-md-row align-items-md-center gap-2">
             <input type="checkbox" checked={task.completed} onChange={() => onToggle(task.id)} />
             {editingId === task.id ? (
               <input
@@ -33,9 +33,15 @@ function TaskList({ tasks, onToggle, onEdit, onRemove }) {
                 autoFocus
               />
             ) : (
-              <span onDoubleClick={() => startEdit(task.id, task.text)} style={{ cursor: 'pointer' }}>
-                {task.text} <small className="text-secondary">({task.priority})</small>
-              </span>
+              <div style={{ cursor: 'pointer' }} onDoubleClick={() => startEdit(task.id, task.text)}>
+                <strong>{task.text}</strong>
+                <div>
+                  <small className="text-secondary">Prioridade: {task.priority}</small><br />
+                  {task.date && (
+                    <small className="text-muted">Prazo: {new Date(task.date).toLocaleDateString()}</small>
+                  )}
+                </div>
+              </div>
             )}
           </div>
           {!task.completed && (
