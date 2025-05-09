@@ -22,9 +22,9 @@ function Login({ onLogin }) {
         <h4 className="text-center mb-3">Login</h4>
         {error && <div className="alert alert-danger">{error}</div>}
         <form onSubmit={handleLogin}>
-          <input type="text" className="form-control mb-3" placeholder="Usuário"
+          <input type="text" className="form-control mb-3" placeholder="Usuário - super"
             value={user} onChange={(e) => setUser(e.target.value)} required />
-          <input type="password" className="form-control mb-3" placeholder="Senha"
+          <input type="password" className="form-control mb-3" placeholder="Senha - 12345678"
             value={pass} onChange={(e) => setPass(e.target.value)} required />
           <button className="btn btn-primary w-100">Entrar</button>
         </form>

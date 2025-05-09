@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 function TaskForm({ onAdd }) {
   const [text, setText] = useState('');
-  const [priority, setPriority] = useState('Média🟡');
+  const [priority, setPriority] = useState('Urgencia ⚡');
   const [date, setDate] = useState('');
 
   const handleSubmit = (e) => {
@@ -19,14 +19,14 @@ function TaskForm({ onAdd }) {
       <input
         type="text"
         className="form-control"
-        placeholder="Nova tarefa"
+        placeholder="Escreva sua tarefa"
         value={text}
         onChange={(e) => setText(e.target.value)}
         required
       />
       <input
         type="date"
-        className="form-control-sm w-auto"
+        className="form-control w-auto"
         value={date}
         onChange={(e) => setDate(e.target.value)}
         required

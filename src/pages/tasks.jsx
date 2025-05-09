@@ -2,12 +2,14 @@ import { useState, useEffect } from "react";
 import Header from "../components/Header";
 import TaskForm from "../components/TaskForm";
 import TaskList from "../components/TaskList";
+import { useNavigate } from "react-router-dom";
 
 export default function TasksPage() {
   const [filterStatus, setFilterStatus] = useState('all');
   const [filterPriority, setFilterPriority] = useState('all');
+  const [filterDate, setFilterDate] = useState('');
   const [tasks, setTasks] = useState([]);
-  const [isAuthenticated, setIsAuthenticated] = useState(true);
+  const navigate = useNavigate();
 
   const saveTasksToLocalStorage = (tasks) => {
     localStorage.setItem('tasks', JSON.stringify(tasks));
@@ -27,7 +29,7 @@ export default function TasksPage() {
   }, []);
 
   const onLogout = () => {
-    setIsAuthenticated(false);
+    navigate ('/')
   };
 
   const addTask = (text, priority, date) => {
@@ -74,22 +76,24 @@ export default function TasksPage() {
     .filter((task) => {
       if (filterPriority === 'all') return true;
       return task.priority === filterPriority;
+    })
+    .filter((task) => {
+      if (!filterDate) return true;
+      return task.date === filterDate;
     });
-    
-    if (!isAuthenticated) {
-      return <div className="text-center mt-5">Você foi desconectado.</div>;
-    }
 
   return (
     <div className="container py-4">
       <Header onLogout={onLogout} />
       <TaskForm onAdd={addTask} />
-      <div className="d-flex gap-3 my-3">
-        <select className="form-select w-auto" onChange={(e) => setFilterStatus(e.target.value)}>
+
+      <div className="d-flex flex-wrap gap-3 my-3">
+         <select className="form-select w-auto" onChange={(e) => setFilterStatus(e.target.value)}>
           <option value="all">Todas</option>
           <option value="completed">Concluídas</option>
           <option value="notCompleted">Não Concluídas</option>
         </select>
+
         <select className="form-select w-auto" onChange={(e) => setFilterPriority(e.target.value)}>
           <option value="all">Todas Prioridades</option>
           <option>Urgente⚡</option>
@@ -97,8 +101,16 @@ export default function TasksPage() {
           <option>Média🟡</option>
           <option>Baixa🟢</option>
         </select>
+        <input
+          type="date"
+          className="form-control w-auto"
+          value={filterDate}
+          onChange={(e) => setFilterDate(e.target.value)}
+          />
+        
       </div>
       <TaskList tasks={filtered} onToggle={toggleTask} onEdit={editTask} onRemove={removeTask} />
+
     </div>
   );
 }
